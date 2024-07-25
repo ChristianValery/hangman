@@ -2,7 +2,10 @@ from typing import List
 
 def get_word() -> str:
     """
-    This function prompts the chooser player for his word and returns that word.
+    Prompt the chooser player for his word and return that word.
+
+    Returns:
+        str
     """
     while True:
         word = input("Please choose a word: ")
@@ -13,7 +16,10 @@ def get_word() -> str:
 
 def get_lives() -> int:
     """
-    This function prompts the chooser player for a number of lives and returns this number of lives.
+    Prompts the chooser player for a number of lives and return this number of lives.
+
+    Returns:
+        int
     """
     while True:
         lives_number = input("Please enter the number of lives (a positive integer): ")
@@ -28,7 +34,10 @@ def get_lives() -> int:
 
 def get_guess() -> str:
     """
-    This function prompts the guesser player to suggest a letter.
+    Prompt the guesser player to suggest a letter.
+
+    Returns:
+        str
     """
     while True:
         letter = input("Guess a letter of the secret word: ")
@@ -47,9 +56,19 @@ def assess_guess(secret_word:str, guessed_letter:str, lives_left:int) -> List[bo
     It then outputs if the guess is correct or not,
     and returns the current number of lives of the player,
     depending on the outcome of the guess.
+
+    Args:
+        str: The secret word to guess.
+        str: The guessed letter.
+        int: The number of lives left.
+    
+    Returns:
+        List[bool | int]: A list of two elements, where first element is a boolean
+        and the second an integer.
     """
     correct = guessed_letter in secret_word
-    lives_left -= 1
+    if not correct:
+        lives_left -= 1
     return [correct, lives_left]
 
 
@@ -63,6 +82,14 @@ def display_word(secret_word:int, suggested_letters:List[str]) -> List[str | boo
     It then displays the secret word with white spaces between the letters,
     hiding the non-guessed letters by replacing them with '_'; and it
     returns True if the correct word has been found, False otherwise.
+
+    Args:
+        int: The secret word.
+        List[str]: The list of the suggested letters.
+    
+    Returns:
+        List[str | bool]: A list of two elements, where first element is a string
+        and the second a boolean.
     """
     word_list = [letter for letter in secret_word]
     guessed_list = ['_' for letter in secret_word]

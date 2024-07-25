@@ -38,10 +38,10 @@ class Hangman:
             self.possible_words.append(word)
         self.word_to_find = [letter for letter in choice(self.possible_words)]
 
-        if len(self.word_to_find) <= lives:
+        if len(set(self.word_to_find)) <= lives:
             self.lives = lives
         else:
-            self.lives = len(self.word_to_find)
+            self.lives = len(set(self.word_to_find))
         
         self.correctly_guessed_letters = ['_' for letter in self.word_to_find]
         self.wrongly_guessed_letters = []
@@ -64,8 +64,8 @@ class Hangman:
         else:
             self.wrongly_guessed_letters.append(letter)
             self.error_count += 1
+            self.lives -= 1
         self.turn_count += 1
-        self.lives -= 1
         return letter.lower()
 
 
@@ -88,7 +88,7 @@ class Hangman:
 
 
     def game_over(self):
-        return "game over ..."
+        return "Sorry, you loose! Game over ..."
 
     def well_played(self):
-        return f"You found the word, '{''.join(self.word_to_find)}', in {self.turn_count} turns with {self.error_count} errors!"
+        return f"Bravo! You found the word, '{''.join(self.word_to_find)}', in {self.turn_count} turns with {self.error_count} errors!"
