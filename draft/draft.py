@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 def get_word() -> str:
     """
@@ -16,7 +16,7 @@ def get_word() -> str:
 
 def get_lives() -> int:
     """
-    Prompts the chooser player for a number of lives and return this number of lives.
+    Prompt the chooser player for a number of lives and return this number of lives.
 
     Returns:
         int
@@ -46,16 +46,14 @@ def get_guess() -> str:
     return letter.lower()
 
 
-def assess_guess(secret_word:str, guessed_letter:str, lives_left:int) -> List[bool | int]:
+def access_guess(secret_word:str, guessed_letter:str, lives_left:int) -> Tuple[bool, int]:
     """
-    This function takes as arguments:
-    'secret_word', the word to be guessed;
+    Take as arguments: 'secret_word', the word to be guessed;
     'guessed_letter', the last letter suggested from guesser player;
     'lives_left', the number of lives left.
 
-    It then outputs if the guess is correct or not,
-    and returns the current number of lives of the player,
-    depending on the outcome of the guess.
+    Output if the guess is correct or not,
+    and return the current number of lives of the player, depending on the outcome of the guess.
 
     Args:
         str: The secret word to guess.
@@ -63,32 +61,31 @@ def assess_guess(secret_word:str, guessed_letter:str, lives_left:int) -> List[bo
         int: The number of lives left.
     
     Returns:
-        List[bool | int]: A list of two elements, where first element is a boolean
+        Tuple[bool, int]: A list of two elements, where first element is a boolean
         and the second an integer.
     """
     correct = guessed_letter in secret_word
     if not correct:
         lives_left -= 1
-    return [correct, lives_left]
+    return correct, lives_left
 
 
-def display_word(secret_word:int, suggested_letters:List[str]) -> List[str | bool]:
+def display_word(secret_word:int, suggested_letters:List[str]) -> Tuple[str, bool]:
     """
-    This function takes as arguments:
-    'secret_word', the word to be guessed;
+    Take as arguments: 'secret_word', the word to be guessed;
     'suggested_letters', a list of the letters suggested by 
     the guesser player throughout the game.
 
-    It then displays the secret word with white spaces between the letters,
-    hiding the non-guessed letters by replacing them with '_'; and it
-    returns True if the correct word has been found, False otherwise.
+    Display the secret word with white spaces between the letters,
+    hiding the non-guessed letters by replacing them with '_';
+    and return True if the correct word has been found, False otherwise.
 
     Args:
         int: The secret word.
         List[str]: The list of the suggested letters.
     
     Returns:
-        List[str | bool]: A list of two elements, where first element is a string
+        Tuple[str, bool]: A list of two elements, where first element is a string
         and the second a boolean.
     """
     word_list = [letter for letter in secret_word]
@@ -100,14 +97,14 @@ def display_word(secret_word:int, suggested_letters:List[str]) -> List[str | boo
                 guessed_list[index] = letter
                 word_list[index] = '_'
     if any(letter == '_' for letter in guessed_list):
-        return [" ".join(guessed_list), False]
+        return " ".join(guessed_list), False
     else:
-        return [" ".join(guessed_list), True]
+        return " ".join(guessed_list), True
 
 
 def main():
     """
-    This function orchestrates a full hangman game.
+    Orchestrate a full hangman game.
     """
     secret_word = get_word()
     lives_left = get_lives()
@@ -116,7 +113,7 @@ def main():
     while lives_left > 0:
         guessed_letter = get_guess()
         suggested_letters.append(guessed_letter)
-        correct, lives_left = assess_guess(secret_word, guessed_letter, lives_left)
+        correct, lives_left = access_guess(secret_word, guessed_letter, lives_left)
         print(f"Your guess was '{correct}' and you have {lives_left} lives left.")
         guessed_word, found = display_word(secret_word, suggested_letters)
         print(guessed_word)
